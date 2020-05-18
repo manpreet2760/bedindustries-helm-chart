@@ -1,4 +1,4 @@
-# Default values for dark-knight-router.
+# Default values for dark-knight-microservice.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -38,7 +38,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 80
 
 ingress:
@@ -73,8 +73,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-nodeSelector:
-  label : node-gateway
+nodeSelector: {}
 
 tolerations: []
 
