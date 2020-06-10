@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bedindustries-microservice-worker.fullname" . }}
+  labels:
+    {{- include "bedindustries-microservice-worker.labels" . | nindent 4 }}
+spec:
+  strategy:
+    type: {{ .Values.deployment.strategy.type }}
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: 1
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "bedindustries-microservice-worker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+      {{- include "bedindustries-microservice-worker.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "bedindustries-microservice-worker.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.deployment.image }}"
+          env:
+            {{- include "bedindustries-microservice-worker.env-variables" . | indent 12 }}
+          imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+        - name: "{{ .Chart.Name }}-health-check"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "nginx:stable"
+          env:
+            {{- include "bedindustries-microservice-worker.env-variables" . | indent 12 }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: {{ .Values.deployment.containerPort }}
+              protocol: TCP
+          {{- if .Values.deployment.enable_healthcheck}}
+          {{- if .Values.deployment.livenessProbe}}
+          livenessProbe:
+          {{- toYaml .Values.deployment.livenessProbe | nindent 12 }}
+          {{- end}}
+          {{- end}}
+          {{- if .Values.deployment.enable_healthcheck}}
+          {{- if .Values.deployment.readinessProbe}}
+          readinessProbe:
+          {{- toYaml .Values.deployment.readinessProbe | nindent 12 }}
+          {{- end}}
+          {{- end}}
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+            requests:
+              cpu: 25m
+              memory: 32Mi
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints.enabled }}
+      topologySpreadConstraints:
+        - maxSkew: {{ .Values.topologySpreadConstraints.maxSkew }}
+          topologyKey: {{ .Values.topologySpreadConstraints.topologyKey }}
+          whenUnsatisfiable: {{ .Values.topologySpreadConstraints.whenUnsatisfiable }}
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end}}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "dark-knight-microservice.name" -}}
+{{- define "bedindustries-microservice-worker.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "dark-knight-microservice.fullname" -}}
+{{- define "bedindustries-microservice-worker.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -27,16 +27,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "dark-knight-microservice.chart" -}}
+{{- define "bedindustries-microservice-worker.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "dark-knight-microservice.labels" -}}
-helm.sh/chart: {{ include "dark-knight-microservice.chart" . }}
-{{ include "dark-knight-microservice.selectorLabels" . }}
+{{- define "bedindustries-microservice-worker.labels" -}}
+helm.sh/chart: {{ include "bedindustries-microservice-worker.chart" . }}
+{{ include "bedindustries-microservice-worker.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -46,18 +46,30 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "dark-knight-microservice.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "dark-knight-microservice.name" . }}
+{{- define "bedindustries-microservice-worker.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "bedindustries-microservice-worker.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "dark-knight-microservice.serviceAccountName" -}}
+{{- define "bedindustries-microservice-worker.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "dark-knight-microservice.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "bedindustries-microservice-worker.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
+{{- end }}
+
+
+{{/*
+Environment variables
+*/}}
+
+{{- define "bedindustries-microservice-worker.env-variables"}}
+{{- range $key, $val := .Values.environment_variables }}
+- name: {{ $key }}
+  value: {{ $val | quote }}
+{{- end}}
 {{- end }}

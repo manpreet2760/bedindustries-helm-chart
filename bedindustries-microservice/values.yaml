@@ -1,0 +1,109 @@
+# Default values for dark-knight-microservice.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deployment:
+  progressDeadlineSeconds: 300
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 34%
+  enable_healthcheck: true
+  image: manpreetbedi/dark-knight-router:latest
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets:
+    - name: regcred
+  containerPort: 80
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 1
+    httpGet:
+      path: /ping
+      port: 80
+  readinessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 1
+    httpGet:
+      path: /ping
+      port: 80
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+environment_variables:
+  EXAMPLE_VARIABLE : "This is just an example."
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+ingress:
+  enabled: true
+  annotations:
+     kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: beta.bedindustries.com
+      paths: ["/"]
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+
+tolerations: []
+
+affinity: {}
+
+service:
+  port: 80
+
+topologySpreadConstraints:
+  enabled: true
+  maxSkew: 1
+  topologyKey: application
+  whenUnsatisfiable: DoNotSchedule
+
+persistence:
+  enabled: false
+  size: 2Gi
+  accessMode: ReadWriteOnce
