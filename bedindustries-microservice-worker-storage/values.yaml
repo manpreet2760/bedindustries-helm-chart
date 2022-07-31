@@ -70,14 +70,14 @@ securityContext: {}
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
+# runAsNonRoot: true
 # runAsUser: 1000
 
 ingress:
   enabled: false
   annotations:
-#    kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  #    kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
   hosts:
     - host: beta.bedindustries.com
       paths: ["/"]
@@ -96,6 +96,7 @@ topologySpreadConstraints:
   maxSkew: 1
   topologyKey: application
   whenUnsatisfiable: DoNotSchedule
+
 
 persistence:
   enabled: true

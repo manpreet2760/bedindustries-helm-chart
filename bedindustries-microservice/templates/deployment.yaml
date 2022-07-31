@@ -42,6 +42,11 @@ spec:
           image: "{{ .Values.deployment.image }}"
           env:
             {{- include "bedindustries-microservice.env-variables" . | indent 12 }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - mountPath: {{ .Values.persistence.mountPath }}
+              name: storage-data
+          {{- end}}
           imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}
           ports:
             - name: http
@@ -61,6 +66,14 @@ spec:
           {{- end}}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
+      volumes:
+        - name: storage-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "bedindustries-microservice.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{ end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "bedindustries-microservice-worker.fullname" . }}
+  name: {{ include "bedindustries-microservice-worker-storage.fullname" . }}
   labels:
-    {{- include "bedindustries-microservice-worker.labels" . | nindent 4 }}
+    {{- include "bedindustries-microservice-worker-storage.labels" . | nindent 4 }}
 spec:
   strategy:
     type: {{ .Values.deployment.strategy.type }}
@@ -12,7 +12,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "bedindustries-microservice-worker.selectorLabels" . | nindent 6 }}
+      {{- include "bedindustries-microservice-worker-storage.selectorLabels" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -20,13 +20,13 @@ spec:
       {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-      {{- include "bedindustries-microservice-worker.selectorLabels" . | nindent 8 }}
+      {{- include "bedindustries-microservice-worker-storage.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.deployment.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "bedindustries-microservice-worker.serviceAccountName" . }}
+      serviceAccountName: {{ include "bedindustries-microservice-worker-storage.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -35,7 +35,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.deployment.image }}"
           env:
-            {{- include "bedindustries-microservice-worker.env-variables" . | indent 12 }}
+            {{- include "bedindustries-microservice-worker-storage.env-variables" . | indent 12 }}
           imagePullPolicy: {{ .Values.deployment.imagePullPolicy }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
@@ -49,7 +49,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "nginx:stable"
           env:
-            {{- include "bedindustries-microservice-worker.env-variables" . | indent 12 }}
+            {{- include "bedindustries-microservice-worker-storage.env-variables" . | indent 12 }}
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -78,7 +78,7 @@ spec:
         - name: worker-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "bedindustries-microservice-worker.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "bedindustries-microservice-worker-storage.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{ end }}
