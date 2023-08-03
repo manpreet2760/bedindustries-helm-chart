@@ -52,10 +52,12 @@ ingress:
   hosts:
     - host: wordpress.sonicx.io
       paths:
-        - /
+        - type: Prefix
+          value: /
     - host: wordpress.bedindustries.com
       paths:
-        - /
+        - type: Prefix
+          value: /
   tls:
     [
     {
@@ -88,3 +90,13 @@ persistence:
   mountPath: /worker
   accessMode: ReadWriteOnce
   size: 2Gi
+serviceAccount:
+  annotations: {}
+  create: false
+  name: ""
+tolerations: []
+topologySpreadConstraints:
+  enabled: true
+  maxSkew: 1
+  topologyKey: application
+  whenUnsatisfiable: DoNotSchedule
