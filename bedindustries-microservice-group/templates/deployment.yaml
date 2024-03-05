@@ -1,0 +1,101 @@
+{{- $persistenceEnabled := .Values.persistence.enabled -}}
+{{- $persistenceMountPath := .Values.persistence.mountPath -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bedindustries-microservice-group.fullname" . }}
+  labels:
+    {{- include "bedindustries-microservice-group.labels" . | nindent 4 }}
+spec:
+  progressDeadlineSeconds: {{ .Values.deployment.progressDeadlineSeconds }}
+  strategy:
+    type: {{ .Values.deployment.strategy.type }}
+    {{- if eq .Values.deployment.strategy.type "RollingUpdate"}}
+    rollingUpdate:
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge }}
+    {{- end}}
+{{- if not .Values.autoscaling.enabled }}
+  replicas: 1
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "bedindustries-microservice-group.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "bedindustries-microservice-group.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "bedindustries-microservice-group.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        {{range .Values.service.containers}}
+        - name: {{ .name }}
+          securityContext:
+            {{- toYaml .securityContext | nindent 12 }}
+          image: "{{ .image }}"
+          env:
+            {{- include "bedindustries-microservice-group.env-variables" . | indent 12 }}
+          {{- if $persistenceEnabled }}
+          volumeMounts:
+            - mountPath: {{ $persistenceMountPath }}
+              name: storage-data
+          {{- end}}
+          imagePullPolicy: {{ .imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .containerPort }}
+              protocol: TCP
+          {{- if .enable_healthcheck}}
+          {{- if .livenessProbe}}
+          livenessProbe:
+          {{- toYaml .livenessProbe | nindent 12 }}
+          {{- end}}
+          {{- end}}
+          {{- if .enable_healthcheck}}
+          {{- if .readinessProbe}}
+          readinessProbe:
+          {{- toYaml .readinessProbe | nindent 12 }}
+          {{- end}}
+          {{- end}}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+        {{- end}}
+      volumes:
+        - name: storage-data
+          {{- if $persistenceEnabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "bedindustries-microservice-group.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{ end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints.enabled }}
+      topologySpreadConstraints:
+        - maxSkew: {{ .Values.topologySpreadConstraints.maxSkew }}
+          topologyKey: {{ .Values.topologySpreadConstraints.topologyKey }}
+          whenUnsatisfiable: {{ .Values.topologySpreadConstraints.whenUnsatisfiable }}
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end}}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
