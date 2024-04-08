@@ -5,43 +5,7 @@ autoscaling:
   minReplicas: 1
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
-deployment:
-  progressDeadlineSeconds: 300
-  strategy:
-    rollingUpdate:
-      maxSurge: 34%
-      maxUnavailable: 0
-    type: RollingUpdate
-  imagePullSecrets:
-      - name: regcred
-containers:
-    - containerPort: 80
-      enable_healthcheck: true
-      image: wordpress
-      imagePullPolicy: IfNotPresent
-      livenessProbe:
-        failureThreshold: 10
-        httpGet:
-          path: /wp-admin/setup-config.php
-          port: 80
-        initialDelaySeconds: 20
-        periodSeconds: 10
-        successThreshold: 1
-      readinessProbe:
-        failureThreshold: 10
-        httpGet:
-          path: /wp-admin/setup-config.php
-          port: 80
-        initialDelaySeconds: 20
-        periodSeconds: 10
-        successThreshold: 1
-      resources:
-        limits:
-          cpu: 400m
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 128Mi
+
 environment_variables:
   EXAMPLE_VARIABLE: This is just an example.
 
@@ -72,6 +36,14 @@ podSecurityContext: {}
 
 
 service:
+  progressDeadlineSeconds: 300
+  strategy:
+    rollingUpdate:
+      maxSurge: 34%
+      maxUnavailable: 0
+    type: RollingUpdate
+  imagePullSecrets:
+      - name: regcred
   containers:
     - name: wordpress
       containerPort: 80
@@ -79,8 +51,6 @@ service:
       enable_healthcheck: true
       image: wordpress
       imagePullPolicy: IfNotPresent
-      imagePullSecrets:
-        - name: regcred
       livenessProbe:
         failureThreshold: 10
         httpGet:
@@ -89,7 +59,6 @@ service:
         initialDelaySeconds: 20
         periodSeconds: 10
         successThreshold: 1
-      progressDeadlineSeconds: 300
       readinessProbe:
         failureThreshold: 10
         httpGet:
@@ -105,12 +74,9 @@ service:
         requests:
           cpu: 100m
           memory: 128Mi
-      strategy:
-        rollingUpdate:
-          maxSurge: 34%
-          maxUnavailable: 0
-        type: RollingUpdate
       securityContext: {}
+      environment_variables: {}
+      mountPath: /shared/data
 
 persistence:
   enabled: true

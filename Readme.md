@@ -14,3 +14,11 @@ helm s3 push <packaged-chart> <repo-name>
 5. Helm repo list
 helm repo list
 
+6. Use following set of commands to push an update to the helm repository
+   1. helm plugin remove s3 
+   2. helm plugin install https://github.com/hypnoglow/helm-s3.git
+   3. helm package bedindustries-microservice-group/
+   4. helm repo remove bedindustries
+   5. helm repo add bedindustries s3://sonicx-io-helm-chart/
+   6. helm s3 push --force ./bedindustries-microservice-group-3.0.0.tgz bedindustries
+
