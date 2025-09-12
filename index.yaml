@@ -1,0 +1,151 @@
+apiVersion: v1
+entries:
+  bedindustries-microservice:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-09-12T13:10:51.264984+05:30"
+    description: Bedindustries chart for microservice deployment.
+    digest: c52e5a2b284c58de73c61f6599e7639b4b1eeb734ce1974d4430e267336bd0b5
+    name: bedindustries-microservice
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-3.0.0.tgz
+    version: 3.0.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-09-12T13:10:51.262262+05:30"
+    description: Bedindustries chart for microservice deployment.
+    digest: 584652d470554daca9883a00c759e17395b8933c58ed80423b73ea62948cda84
+    name: bedindustries-microservice
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-2.0.0.tgz
+    version: 2.0.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-09-12T13:10:51.26139+05:30"
+    description: Bedindustries chart for microservice deployment.
+    digest: a1c7c222f9edd1c61d434c4f13638b6e82a413494199662e6f00e6ed26c5cee5
+    name: bedindustries-microservice
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-1.0.0.tgz
+    version: 1.0.0
+  bedindustries-microservice-group:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-09-12T13:10:51.267399+05:30"
+    description: Bedindustries chart for multi container microservice deployment.
+    digest: dfac50cf2ae86002f242907ab2fbe8242d751463b8ef41575a8d78bc47d8484b
+    name: bedindustries-microservice-group
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-group-3.0.0.tgz
+    version: 3.0.0
+  bedindustries-microservice-postiz:
+  - apiVersion: v2
+    appVersion: 1.3.0
+    created: "2025-09-12T13:10:51.269637+05:30"
+    description: A Social Media Scheduling App
+    digest: d361334d4a180372cec00261a67f2a21258c37c16a2b942551017f7572cc5098
+    home: https://postiz.com
+    keywords:
+    - social media
+    - marketing
+    - scheduling
+    - queue
+    maintainers:
+    - email: manpreet2760@gmail.com
+      name: bedindustries
+    name: bedindustries-microservice-postiz
+    sources:
+    - https://github.com/gitroomhq/postiz-app
+    - https://github.com/gitroomhq/postiz-helmchart
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-postiz-1.0.5.tgz
+    version: 1.0.5
+  bedindustries-microservice-worker:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-09-12T13:10:51.277534+05:30"
+    description: Bedi Industries chart for microservice worker deployment.
+    digest: 4a131df95699c37ab34c6f3e4b70c0a7f81617494977ea7665397f7219722698
+    name: bedindustries-microservice-worker
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-worker-3.0.0.tgz
+    version: 3.0.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-09-12T13:10:51.273758+05:30"
+    description: Bedi Industries chart for microservice worker deployment.
+    digest: e7e0c8f7f8867bcd73a4ab1679acfd3bbf54d331207dfa6f86bc2e80d2441dfd
+    name: bedindustries-microservice-worker
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-worker-2.0.0.tgz
+    version: 2.0.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-09-12T13:10:51.271719+05:30"
+    description: Bedi Industries chart for microservice worker deployment.
+    digest: 805c7d49221b7d9e747a59aed2cb614abe31ddff8d840b7af6e1e0bd058370f0
+    name: bedindustries-microservice-worker
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-worker-1.0.0.tgz
+    version: 1.0.0
+  bedindustries-microservice-worker-storage:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-09-12T13:10:51.281168+05:30"
+    description: A Helm chart for Kubernetes
+    digest: 5f980a9ac16cb0a64033189c6a612b5bc25f67c5350998e2449d46450d79da09
+    name: bedindustries-microservice-worker-storage
+    type: application
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/bedindustries-microservice-worker-storage-0.1.0.tgz
+    version: 0.1.0
+  nginx:
+  - annotations:
+      category: Infrastructure
+      images: |
+        - name: git
+          image: docker.io/bitnami/git:2.43.2-debian-12-r2
+        - name: nginx
+          image: docker.io/bitnami/nginx:1.25.4-debian-12-r2
+        - name: nginx-exporter
+          image: docker.io/bitnami/nginx-exporter:1.1.0-debian-12-r7
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.25.4
+    created: "2025-09-12T13:10:51.287135+05:30"
+    dependencies:
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: NGINX Open Source is a web server that can be also used as a reverse
+      proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due
+      to its ability to provide faster content.
+    digest: 981177c9e0f403050bd0ad5bc5d3a34a4c25461d5b8b597b59e78260214b08cc
+    home: https://bitnami.com
+    icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
+    keywords:
+    - nginx
+    - http
+    - web
+    - www
+    - reverse proxy
+    maintainers:
+    - name: VMware, Inc.
+      url: https://github.com/bitnami/charts
+    name: nginx
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/nginx
+    urls:
+    - https://manpreet_singh_bedi@bitbucket.org/darkknightbotos/dark-knight-helm-chart.git/nginx-15.14.0.tgz
+    version: 15.14.0
+generated: "2025-09-12T13:10:51.259768+05:30"
