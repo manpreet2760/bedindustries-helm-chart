@@ -3,7 +3,7 @@ entries:
   bedindustries-microservice:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-09-12T15:44:46.132438+05:30"
+    created: "2025-11-22T23:47:42.603736+05:30"
     description: Bedindustries chart for microservice deployment.
     digest: c52e5a2b284c58de73c61f6599e7639b4b1eeb734ce1974d4430e267336bd0b5
     name: bedindustries-microservice
@@ -13,7 +13,7 @@ entries:
     version: 3.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-09-12T15:44:46.130084+05:30"
+    created: "2025-11-22T23:47:42.600325+05:30"
     description: Bedindustries chart for microservice deployment.
     digest: 584652d470554daca9883a00c759e17395b8933c58ed80423b73ea62948cda84
     name: bedindustries-microservice
@@ -23,7 +23,7 @@ entries:
     version: 2.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-09-12T15:44:46.128848+05:30"
+    created: "2025-11-22T23:47:42.598573+05:30"
     description: Bedindustries chart for microservice deployment.
     digest: a1c7c222f9edd1c61d434c4f13638b6e82a413494199662e6f00e6ed26c5cee5
     name: bedindustries-microservice
@@ -34,7 +34,7 @@ entries:
   bedindustries-microservice-group:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-09-12T15:44:46.136165+05:30"
+    created: "2025-11-22T23:47:42.608617+05:30"
     description: Bedindustries chart for multi container microservice deployment.
     digest: dfac50cf2ae86002f242907ab2fbe8242d751463b8ef41575a8d78bc47d8484b
     name: bedindustries-microservice-group
@@ -45,7 +45,7 @@ entries:
   bedindustries-microservice-postiz:
   - apiVersion: v2
     appVersion: 1.3.0
-    created: "2025-09-12T15:44:46.138435+05:30"
+    created: "2025-11-22T23:47:42.611142+05:30"
     description: A Social Media Scheduling App
     digest: d361334d4a180372cec00261a67f2a21258c37c16a2b942551017f7572cc5098
     home: https://postiz.com
@@ -68,7 +68,7 @@ entries:
   bedindustries-microservice-worker:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-09-12T15:44:46.14477+05:30"
+    created: "2025-11-22T23:47:42.617058+05:30"
     description: Bedi Industries chart for microservice worker deployment.
     digest: 4a131df95699c37ab34c6f3e4b70c0a7f81617494977ea7665397f7219722698
     name: bedindustries-microservice-worker
@@ -78,7 +78,7 @@ entries:
     version: 3.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-09-12T15:44:46.14241+05:30"
+    created: "2025-11-22T23:47:42.614885+05:30"
     description: Bedi Industries chart for microservice worker deployment.
     digest: e7e0c8f7f8867bcd73a4ab1679acfd3bbf54d331207dfa6f86bc2e80d2441dfd
     name: bedindustries-microservice-worker
@@ -88,7 +88,7 @@ entries:
     version: 2.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-09-12T15:44:46.140254+05:30"
+    created: "2025-11-22T23:47:42.613124+05:30"
     description: Bedi Industries chart for microservice worker deployment.
     digest: 805c7d49221b7d9e747a59aed2cb614abe31ddff8d840b7af6e1e0bd058370f0
     name: bedindustries-microservice-worker
@@ -99,7 +99,7 @@ entries:
   bedindustries-microservice-worker-storage:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-09-12T15:44:46.146758+05:30"
+    created: "2025-11-22T23:47:42.619121+05:30"
     description: A Helm chart for Kubernetes
     digest: 5f980a9ac16cb0a64033189c6a612b5bc25f67c5350998e2449d46450d79da09
     name: bedindustries-microservice-worker-storage
@@ -107,6 +107,48 @@ entries:
     urls:
     - https://manpreet2760.github.io/bedindustries-helm-chart/bedindustries-microservice-worker-storage-0.1.0.tgz
     version: 0.1.0
+  dagster:
+  - apiVersion: v2
+    appVersion: dev
+    created: "2025-11-22T23:47:42.639635+05:30"
+    dependencies:
+    - condition: dagster-user-deployments.enableSubchart
+      name: dagster-user-deployments
+      repository: ""
+      version: 0.0.1-dev
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
+      version: 8.1.0
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
+      version: 6.16.3
+    - condition: redis.internal
+      name: redis
+      repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
+      version: 12.7.4
+    description: The data orchestration platform built for productivity.
+    digest: 4d9b8fb073084758634d8dcedf2c22bcf80c56643331d1fac7c9dcae8256b05d
+    icon: https://dagster.io/images/brand/logos/dagster-primary-mark.png
+    keywords:
+    - analytics
+    - data-orchestrator
+    - data-pipelines
+    - etl
+    - workflow
+    kubeVersion: '>= 1.18.0-0'
+    maintainers:
+    - email: support@dagsterlabs.com
+      name: Dagster Labs
+      url: https://dagster.io/about
+    name: dagster
+    sources:
+    - https://github.com/dagster-io/dagster/tree/master/helm/dagster
+    type: application
+    urls:
+    - https://manpreet2760.github.io/bedindustries-helm-chart/dagster-0.0.1-dev.tgz
+    version: 0.0.1-dev
   nginx:
   - annotations:
       category: Infrastructure
@@ -120,7 +162,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.25.4
-    created: "2025-09-12T15:44:46.154376+05:30"
+    created: "2025-11-22T23:47:42.647128+05:30"
     dependencies:
     - name: common
       repository: oci://registry-1.docker.io/bitnamicharts
@@ -148,4 +190,4 @@ entries:
     urls:
     - https://manpreet2760.github.io/bedindustries-helm-chart/nginx-15.14.0.tgz
     version: 15.14.0
-generated: "2025-09-12T15:44:46.126331+05:30"
+generated: "2025-11-22T23:47:42.597434+05:30"
