@@ -22,4 +22,7 @@ helm repo list
    5. helm repo add bedindustries s3://leowand-com-helm-chart/
    6. helm s3 push --force ./bedindustries-microservice-group-3.0.0.tgz bedindustries
    7. helm repo index . --url https://manpreet2760.github.io/bedindustries-helm-chart/
+7. Use following set of commands to build dependency
+   1. cd <package-repository>
+   2. helm dependency build
 
