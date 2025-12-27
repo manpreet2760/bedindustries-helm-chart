@@ -39,8 +39,6 @@ spec:
           env: # Add this section to define environment variables
             - name: DB
               value: "postgresql"
-            - name: DB_PORT
-              value: "5432"
             {{- if .Values.temporal.env }}
             {{- toYaml .Values.temporal.env | nindent 12 }}
             {{- end }}
