@@ -44,6 +44,53 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
+Render init container image name from structured or string format.
+Supports both legacy string format ("repo:tag") and structured format ({repository, tag, digest}).
+*/}}
+{{- define "dagster.initContainerImage.name" }}
+  {{- $ := index . 0 }}
+  {{- $image := index . 1 }}
+
+  {{- /* Handle string image format (backwards compat) */}}
+  {{- if kindIs "string" $image }}
+    {{- $image }}
+  {{- else }}
+    {{- /* Handle structured image format */}}
+    {{- if and $image.digest (ne $image.digest "") }}
+      {{- printf "%s@%s" $image.repository $image.digest }}
+    {{- else if $image.tag }}
+      {{- $tag := $image.tag | toYaml | trimAll "\"" }}
+      {{- printf "%s:%s" $image.repository $tag }}
+    {{- else }}
+      {{- printf "%s:%s" $image.repository $.Chart.Version }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Render a full init container spec, processing structured image format if present.
+*/}}
+{{- define "dagster.initContainer" }}
+  {{- $ := index . 0 }}
+  {{- $container := index . 1 }}
+
+  {{- /* If container.image is a string, pass through the whole container */}}
+  {{- if kindIs "string" $container.image }}
+    {{- toYaml $container }}
+  {{- else }}
+    {{- /* Build container with processed image */}}
+    {{- $processedImage := include "dagster.initContainerImage.name" (list $ $container.image) | trim }}
+    {{- $imagePullPolicy := $container.image.pullPolicy }}
+    {{- $containerWithoutImage := omit $container "image" }}
+    {{- $newContainer := merge (dict "image" $processedImage) $containerWithoutImage }}
+    {{- if $imagePullPolicy }}
+      {{- $newContainer = merge (dict "imagePullPolicy" $imagePullPolicy) $newContainer }}
+    {{- end }}
+    {{- toYaml $newContainer }}
+  {{- end }}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "dagster.chart" -}}
@@ -143,11 +190,23 @@ DAGSTER_K8S_PIPELINE_RUN_ENV_CONFIGMAP: "{{ template "dagster.fullname" . }}-pip
     run_k8s_config:
       pod_spec_config:
         automount_service_account_token: true
+        {{- if .nodeSelector }}
+        node_selector: {{- .nodeSelector | toYaml | nindent 10 }}
+        {{- end }}
+        {{- if .tolerations }}
+        tolerations: {{- .tolerations | toYaml | nindent 10 }}
+        {{- end }}
+        {{- if .podSecurityContext }}
+        security_context: {{- .podSecurityContext | toYaml | nindent 10 }}
+        {{- end }}
         {{- if .sidecarContainers }}
         containers: {{- toYaml .sidecarContainers | nindent 10 }}
         {{- end }}
         {{- if .initContainers }}
-        init_containers: {{- toYaml .initContainers | nindent 10 }}
+        init_containers:
+          {{- range $container := .initContainers }}
+          - {{ include "dagster.initContainer" (list $ $container) | nindent 12 | trim }}
+          {{- end }}
         {{- end }}
       {{- if .annotations }}
       pod_template_spec_metadata:
